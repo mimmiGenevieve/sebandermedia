@@ -1,11 +1,8 @@
 import Head from 'next/head'
-import handler from './api/hello'
+import handler from './api/contentful'
 import styled from 'styled-components'
-
-type Data = {
-    title: string
-    imageUrl: string
-}
+import { ContentFulType, Data } from '@/types'
+import RenderItem from 'components/RenderItem'
 
 const Container = styled.div`
     background-color: #181818;
@@ -32,7 +29,7 @@ const Container = styled.div`
     }
 `
 
-function Home({ data }: { data: Data[] }) {
+const Home = ({ data }: { data: Data[] }) => {
     return (
         <>
             <Head>
@@ -52,11 +49,8 @@ function Home({ data }: { data: Data[] }) {
                     <span className="bold">SEBANDER</span>
                     <span className="thin"> | MEDIA</span>
                 </h1>
-                {data.map((item: Data) => (
-                    <div key={item.title.replace(/ /g, '')}>
-                        <span>{item.title}</span>
-                        <img src={item.imageUrl} />
-                    </div>
+                {data.map((item) => (
+                    <RenderItem item={item} />
                 ))}
             </Container>
         </>
@@ -65,39 +59,19 @@ function Home({ data }: { data: Data[] }) {
 
 export async function getServerSideProps() {
     const res = await handler()
-    const data: {
-        id: string
-        title: string
-        images?: string[]
-        imageUrl?: string
-    }[] = []
+    const data: Data[] = []
 
-    res.items.forEach(function (item: {
-        sys: { contentType: { sys: { id: any } } }
-        fields: {
-            title: string
-            images: { fields: { file: { url: string } } }[]
-            image: { fields: { file: { url: string } } }
-        }
-    }) {
-        const id = item.sys.contentType.sys.id
-
-        if (id === 'carousel')
-            data.push({
-                id,
-                title: item.fields.title,
-                images: item.fields.images.map(
+    res.items.forEach(function (item: ContentFulType) {
+        data.push({
+            id: item.sys.contentType.sys.id,
+            title: item.fields.title,
+            images:
+                item.fields.images?.map(
                     (img: { fields: { file: { url: string } } }) =>
                         img.fields.file.url
-                ),
-            })
-
-        if (id === 'heroImage')
-            data.push({
-                id,
-                title: item.fields.title,
-                imageUrl: item.fields.image.fields.file.url,
-            })
+                ) ?? null,
+            imageUrl: item.fields.image?.fields.file.url ?? null,
+        })
     })
 
     return { props: { data } }
