@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import handler from './api/contentful'
 import styled from 'styled-components'
-import { ContentFulType, Data } from '@/types'
+import { Data, Seo } from '@/types'
 import RenderItem from 'components/RenderItem'
 
 const Container = styled.div`
@@ -29,20 +29,26 @@ const Container = styled.div`
     }
 `
 
-const Home = ({ data }: { data: Data[] }) => {
+const Home = ({ data, seo }: { data: Data[]; seo: Seo }) => {
     return (
         <>
             <Head>
                 <title>Sebander | Media</title>
-                <meta
-                    name="description"
-                    content="Drone Photographer (A1/A2/A3)"
-                />
+                <meta name="description" content={seo?.metaDescription} />
                 <meta
                     name="viewport"
                     content="width=device-width, initial-scale=1"
                 />
-                <link rel="icon" href="/favicon.ico" />
+                <link
+                    rel="icon"
+                    href="/favicon_dark.ico"
+                    media="(prefers-color-scheme:dark)"
+                />
+                <link
+                    rel="icon"
+                    href="/favicon_light.ico"
+                    media="(prefers-color-scheme:light)"
+                />
             </Head>
             <Container>
                 <h1>
@@ -59,22 +65,11 @@ const Home = ({ data }: { data: Data[] }) => {
 
 export async function getServerSideProps() {
     const res = await handler()
-    const data: Data[] = []
 
-    res.items.forEach(function (item: ContentFulType) {
-        data.push({
-            id: item.sys.contentType.sys.id,
-            title: item.fields.title,
-            images:
-                item.fields.images?.map(
-                    (img: { fields: { file: { url: string } } }) =>
-                        img.fields.file.url
-                ) ?? null,
-            imageUrl: item.fields.image?.fields.file.url ?? null,
-        })
-    })
+    const seo = res.find((item: Seo) => item.id === 'landingpage')
+    const data = res.filter((item: Data) => item.id !== 'landingpage')
 
-    return { props: { data } }
+    return { props: { data, seo } }
 }
 
 export default Home
