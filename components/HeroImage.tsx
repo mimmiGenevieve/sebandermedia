@@ -15,7 +15,11 @@ const HeroImage = ({ item }: { item: Data }) => {
     return (
         <Container>
             <span>{item.title}</span>
-            <Image src={'http:' + item.imageUrl ?? ''} alt={item.title} fill />
+            <Image
+                src={'http:' + item.imageUrl ?? ''}
+                alt={item.title ?? ''}
+                fill
+            />
         </Container>
     )
 }

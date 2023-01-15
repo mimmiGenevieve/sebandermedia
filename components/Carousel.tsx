@@ -1,9 +1,51 @@
-import { Data } from '@/types'
+import { Data } from '@/types';
+import Image from 'next/image';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore, { Autoplay, Navigation, Pagination } from 'swiper';
+import styled from 'styled-components';
+import 'swiper/css';
 
+SwiperCore.use([Navigation, Pagination, Autoplay]);
+
+const Container = styled.div`
+    position: absolute;
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+
+    .swiper {
+        .swiper-slide {
+            height: 100vh;
+
+            img {
+                object-fit: cover;
+            }
+        }
+    }
+`;
 const Carousel = ({ item }: { item: Data }) => {
-    console.log(item)
+    return (
+        <Container>
+            <Swiper
+                slidesPerView={1}
+                autoplay={{
+                    delay: 5000,
+                    disableOnInteraction: false,
+                }}
+                pagination={{ clickable: true }}
+                navigation
+                allowTouchMove
+                loop={true}
+            >
+                {item.images?.map((img) => (
+                    <SwiperSlide>
+                        <Image src={'http:' + img ?? ''} alt={img ?? ''} fill />
+                    </SwiperSlide>
+                ))}
+            </Swiper>
+        </Container>
+    );
+};
 
-    return <span>{item.title}</span>
-}
-
-export default Carousel
+export default Carousel;
