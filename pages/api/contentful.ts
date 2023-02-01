@@ -1,26 +1,34 @@
-import { ContentFulType, ContentfulData } from '@/types'
+import { ContentFulType, ContentfulData } from '@/types';
 
-const contentful = require('contentful')
+const contentful = require('contentful');
 
 const client = contentful.createClient({
-    space: '3x8meoim7gkz',
-    accessToken: '4kJWXfnpCxtmJ3J-K_hhoRs-qp0aKZ3pwz11MPQhPc8',
-})
+    space: process.env.space,
+    accessToken: process.env.accessToken,
+});
 
 export default function handler() {
     return client
         .getEntries()
         .then((entry: { items: ContentFulType[] }) => {
-            const data: ContentfulData[] = []
+            const data: ContentfulData[] = [];
 
             entry.items.forEach(function (item: ContentFulType) {
-                const id = item.sys.contentType.sys.id
+                const id = item.sys.contentType.sys.id;
 
-                if (id === 'landingpage') {
+                if (id === 'seo') {
+                    console.log(item.fields);
+
                     data.push({
                         id,
-                        metaDescription: item.fields.seo,
-                    })
+                        metaDescription: item.fields.description ?? '',
+                        metaTitle: item.fields.title ?? '',
+                    });
+                } else if (id === 'landingpage') {
+                    data.push({
+                        id,
+                        metaDescription: item.fields.description ?? '',
+                    });
                 } else {
                     data.push({
                         id,
@@ -31,11 +39,11 @@ export default function handler() {
                                     img.fields.file.url
                             ) ?? null,
                         imageUrl: item.fields.image?.fields.file.url ?? null,
-                    })
+                    });
                 }
-            })
+            });
 
-            return data
+            return data;
         })
-        .catch((err: any) => console.log(err))
+        .catch((err: any) => console.log(err));
 }

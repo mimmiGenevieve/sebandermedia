@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import handler from './api/contentful';
 import styled from 'styled-components';
-import { Data, Seo } from '@/types';
+import { Data, TypeSeoFields } from '@/types';
 import RenderItem from 'components/RenderItem';
 
 const Container = styled.div``;
@@ -33,11 +33,11 @@ const Title = styled.div`
     }
 `;
 
-const Home = ({ data, seo }: { data: Data[]; seo: Seo }) => {
+const Home = ({ data, seo }: { data: Data[]; seo: TypeSeoFields }) => {
     return (
         <>
             <Head>
-                <title>Sebander | Media</title>
+                <title>{seo?.metaTitle}</title>
                 <meta name="description" content={seo?.metaDescription} />
                 <meta
                     name="viewport"
@@ -73,8 +73,13 @@ const Home = ({ data, seo }: { data: Data[]; seo: Seo }) => {
 export async function getServerSideProps() {
     const res = await handler();
 
-    const seo = res.find((item: Seo) => item.id === 'landingpage');
+    let seo = res.find((item: TypeSeoFields) => item.id === 'seo');
     const data = res.filter((item: Data) => item.id !== 'landingpage');
+    const page = res.filter((item: Data) => item.id === 'landingpage');
+
+    if (page.metaDescription) seo.metaDescription = page.metaDescription;
+
+    console.log(page);
 
     return { props: { data, seo } };
 }
