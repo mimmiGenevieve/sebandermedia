@@ -39,7 +39,7 @@ const Carousel = ({ item }: { item: Data }) => {
                 loop={true}
             >
                 {item.images?.map((img) => (
-                    <SwiperSlide>
+                    <SwiperSlide key={img}>
                         <Image src={'http:' + img ?? ''} alt={img ?? ''} fill />
                     </SwiperSlide>
                 ))}

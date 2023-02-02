@@ -17,8 +17,6 @@ export default function handler() {
                 const id = item.sys.contentType.sys.id;
 
                 if (id === 'seo') {
-                    console.log(item.fields);
-
                     data.push({
                         id,
                         metaDescription: item.fields.description ?? '',

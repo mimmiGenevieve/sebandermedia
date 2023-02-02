@@ -1,14 +1,12 @@
 import Head from 'next/head';
 import handler from './api/contentful';
+import Image from 'next/image';
 import styled from 'styled-components';
 import { Data, TypeSeoFields } from '@/types';
 import RenderItem from 'components/RenderItem';
 
-const Container = styled.div``;
-
 const Title = styled.div`
     cursor: default;
-    font-size: 2rem;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -17,19 +15,18 @@ const Title = styled.div`
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
     z-index: 9;
-
     background: rgba(0, 0, 0, 0.8);
     width: 100%;
     text-align: center;
-    padding: 2rem 0;
+    padding: 0 2%;
 
-    h1 .bold {
-        font-weight: 700;
+    @media only screen and (min-width: 600px) {
+        padding: 2rem;
     }
 
-    h1 .thin {
-        font-weight: 300;
-        color: #6e121d;
+    img {
+        height: 5rem;
+        max-width: 100%;
     }
 `;
 
@@ -54,23 +51,19 @@ const Home = ({ data, seo }: { data: Data[]; seo: TypeSeoFields }) => {
                     media="(prefers-color-scheme:light)"
                 />
             </Head>
-            <Container>
-                <Title>
-                    <h1>
-                        <span className="bold">SEBANDER</span>
-                        <span className="thin"> | MEDIA</span>
-                    </h1>
-                </Title>
 
-                {data.map((item) => (
-                    <RenderItem item={item} />
-                ))}
-            </Container>
+            <Title>
+                <img src="\logo.svg" alt="SEBANDER | MEDIA" />
+            </Title>
+
+            {data.map((item) => (
+                <RenderItem item={item} key={item.id} />
+            ))}
         </>
     );
 };
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
     const res = await handler();
 
     let seo = res.find((item: TypeSeoFields) => item.id === 'seo');
@@ -78,8 +71,6 @@ export async function getServerSideProps() {
     const page = res.filter((item: Data) => item.id === 'landingpage');
 
     if (page.metaDescription) seo.metaDescription = page.metaDescription;
-
-    console.log(page);
 
     return { props: { data, seo } };
 }
