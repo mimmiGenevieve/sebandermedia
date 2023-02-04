@@ -1,9 +1,9 @@
 import Head from 'next/head';
 import handler from './api/contentful';
-import Image from 'next/image';
 import styled from 'styled-components';
 import { Data, TypeSeoFields } from '@/types';
 import RenderItem from 'components/RenderItem';
+import Logo from 'components/logo';
 
 const Title = styled.div`
     cursor: default;
@@ -24,7 +24,7 @@ const Title = styled.div`
         padding: 2rem;
     }
 
-    img {
+    svg {
         height: 5rem;
         max-width: 100%;
     }
@@ -53,7 +53,7 @@ const Home = ({ data, seo }: { data: Data[]; seo: TypeSeoFields }) => {
             </Head>
 
             <Title>
-                <img src="\logo.svg" alt="SEBANDER | MEDIA" />
+                <Logo />
             </Title>
 
             {data.map((item) => (
