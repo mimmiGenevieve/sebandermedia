@@ -42,12 +42,14 @@ const Home = ({ data, seo }: { data: Data[]; seo: TypeSeoFields }) => {
                 />
                 <link
                     rel="icon"
-                    href="/favicon_dark.ico"
+                    type="image/x-icon"
+                    href="/favIcon_dark.ico"
                     media="(prefers-color-scheme:dark)"
                 />
                 <link
                     rel="icon"
-                    href="/favicon_light.ico"
+                    type="image/x-icon"
+                    href="/favIcon_light.ico"
                     media="(prefers-color-scheme:light)"
                 />
             </Head>
