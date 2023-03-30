@@ -1,27 +1,33 @@
-import { Data } from '@/types'
-import Image from 'next/image'
-import styled from 'styled-components'
+import { Data } from '@/types';
+import Image from 'next/image';
+import styled from 'styled-components';
 
 const Container = styled.div`
     position: relative;
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
-`
+    height: 100vh;
+    width: 100vw;
+
+    img {
+        object-fit: cover;
+    }
+`;
 
 const HeroImage = ({ item }: { item: Data }) => {
-    console.log(item)
+    console.log(item);
 
     return (
         <Container>
             <span>{item.title}</span>
             <Image
-                src={'http:' + item.imageUrl ?? ''}
-                alt={item.title ?? ''}
+                src={item.image.url ?? ''}
+                alt={item.image.fileName ?? ''}
                 fill
             />
         </Container>
-    )
-}
+    );
+};
 
-export default HeroImage
+export default HeroImage;

@@ -4,12 +4,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Autoplay, Navigation, Pagination } from 'swiper';
 import styled from 'styled-components';
 import 'swiper/css';
+import { Key } from 'react';
 
 SwiperCore.use([Navigation, Pagination, Autoplay]);
 
 const Container = styled.div`
-    position: absolute;
-    top: 0;
     height: 100vh;
     width: 100vw;
     overflow: hidden;
@@ -24,6 +23,7 @@ const Container = styled.div`
         }
     }
 `;
+
 const Carousel = ({ item }: { item: Data }) => {
     return (
         <Container>
@@ -38,11 +38,17 @@ const Carousel = ({ item }: { item: Data }) => {
                 allowTouchMove
                 loop={true}
             >
-                {item.images?.map((img) => (
-                    <SwiperSlide key={img}>
-                        <Image src={'http:' + img ?? ''} alt={img ?? ''} fill />
-                    </SwiperSlide>
-                ))}
+                {item.imagesCollection.items?.map(
+                    (img: { fileName: string; url: string }) => (
+                        <SwiperSlide key={img.fileName}>
+                            <Image
+                                src={img.url ?? ''}
+                                alt={img.fileName ?? ''}
+                                fill
+                            />
+                        </SwiperSlide>
+                    )
+                )}
             </Swiper>
         </Container>
     );

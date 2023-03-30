@@ -1,16 +1,20 @@
-import Head from 'next/head';
-import handler from './api/contentful';
 import styled from 'styled-components';
-import { Data, TypeSeoFields } from '@/types';
+import { Data } from '@/types';
 import RenderItem from 'components/RenderItem';
 import Logo from 'components/logo';
+import { useEffect, useRef, useState } from 'react';
 
-const Title = styled.div`
+const Wrapper = styled.div`
+    position: relative;
+`;
+
+const Title = styled.h1`
     cursor: default;
     position: absolute;
-    top: 50%;
+    top: 50vh;
     left: 50%;
     transform: translate(-50%, -50%);
+    transition: padding 0.1s ease;
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
@@ -27,54 +31,76 @@ const Title = styled.div`
     svg {
         height: 5rem;
         max-width: 100%;
+        transition: height 0.5s ease;
+    }
+
+    &.sticky {
+        position: fixed;
+        top: 0;
+        left: 0;
+        transform: none;
+
+        @media only screen and (min-width: 600px) {
+            padding: 1rem;
+        }
+
+        svg {
+            height: 2.5rem;
+            max-width: 100%;
+        }
     }
 `;
 
-const Home = ({ data, seo }: { data: Data[]; seo: TypeSeoFields }) => {
+const Home = ({ componentsCollection }: { componentsCollection: any }) => {
+    const bloks = componentsCollection;
+    const [isSticky, setIsSticky] = useState(false);
+    const titleRef = useRef<HTMLHeadingElement>(null);
+
+    const handleScroll = () => {
+        if (
+            window.pageYOffset > window.innerHeight / 4 &&
+            titleRef.current &&
+            titleRef.current.getBoundingClientRect().top <= 0
+        ) {
+            setIsSticky(true);
+        } else {
+            setIsSticky(false);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [handleScroll]);
+
     return (
         <>
-            <Head>
-                <title>{seo?.metaTitle}</title>
-                <meta name="description" content={seo?.metaDescription} />
-                <meta
-                    name="viewport"
-                    content="width=device-width, initial-scale=1"
-                />
-                <link
-                    rel="icon"
-                    type="image/x-icon"
-                    href="/favIcon_dark.ico"
-                    media="(prefers-color-scheme:dark)"
-                />
-                <link
-                    rel="icon"
-                    type="image/x-icon"
-                    href="/favIcon_light.ico"
-                    media="(prefers-color-scheme:light)"
-                />
-            </Head>
+            <Wrapper>
+                <Title className={isSticky ? 'sticky' : ''} ref={titleRef}>
+                    <Logo />
+                </Title>
 
-            <Title>
-                <Logo />
-            </Title>
-
-            {data.map((item) => (
-                <RenderItem item={item} key={item.id} />
-            ))}
+                {bloks.items.map((item: Data) => (
+                    <RenderItem
+                        item={item}
+                        key={item.title?.replace(' ', '-')}
+                    />
+                ))}
+            </Wrapper>
         </>
     );
 };
 
 export async function getStaticProps() {
-    const res = await handler();
+    const response = await fetch(
+        'http://localhost:3000/api/graphql?type=landingpage'
+    );
+    const data = await response.json();
 
-    let seo = res.find((item: TypeSeoFields) => item.id === 'seo');
-    const data = res.filter((item: Data) => item.id !== 'landingpage');
-    const page = res.filter((item: Data) => item.id === 'landingpage');
-
-    if (page.metaDescription) seo.metaDescription = page.metaDescription;
-
-    return { props: { data, seo } };
+    return { props: data.pageCollection.items[0] };
 }
 
 export default Home;

@@ -30,6 +30,9 @@ export interface ContentfulData {
 }
 
 export interface Data {
+    image: any;
+    imagesCollection: any;
+    __typename: string;
     id: string;
     title?: string;
     imageUrl?: string;
@@ -38,8 +41,6 @@ export interface Data {
 
 export interface TypeSeoFields {
     id: string;
-    metaTitle?: Contentful.EntryFields.Symbol;
-    metaDescription?: Contentful.EntryFields.Symbol;
-    favicon?: Contentful.Asset;
-    logo?: Contentful.Asset;
+    title?: string;
+    description?: string;
 }

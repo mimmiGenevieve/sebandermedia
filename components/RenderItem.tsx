@@ -8,10 +8,10 @@ type Props = {
 };
 
 const RenderItem: React.FC<Props> = ({ item }) => {
-    if (item.id === 'carousel') {
+    if (item.__typename === 'Carousel') {
         return <Carousel item={item} />;
     }
-    if (item.id === 'heroImage') {
+    if (item.__typename === 'HeroImage') {
         return <HeroImage item={item} />;
     }
 

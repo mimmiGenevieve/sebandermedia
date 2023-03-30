@@ -15,6 +15,7 @@ export default function handler() {
 
             entry.items.forEach(function (item: ContentFulType) {
                 const id = item.sys.contentType.sys.id;
+                console.log(item);
 
                 if (id === 'seo') {
                     data.push({
