@@ -3,6 +3,7 @@ import { Data } from '@/types';
 import RenderItem from 'components/RenderItem';
 import Logo from 'components/logo';
 import { useEffect, useRef, useState } from 'react';
+import OrderForm from '@/components/Form';
 
 const Wrapper = styled.div`
     position: relative;
@@ -89,6 +90,7 @@ const Home = ({ componentsCollection }: { componentsCollection: any }) => {
                         key={item.title?.replace(' ', '-')}
                     />
                 ))}
+                <OrderForm />
             </Wrapper>
         </>
     );

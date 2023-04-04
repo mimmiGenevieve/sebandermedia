@@ -1,0 +1,257 @@
+[
+    {
+        "name": "The Sky Is Burning",
+        "options": [
+            {
+                "material": "Canvas",
+                "options": [
+                    {
+                        "size": "140x100",
+                        "copies": 5,
+                        "price": 7500
+                    },
+                    {
+                        "size": "120x180",
+                        "copies": 10,
+                        "price": 2900
+                    },
+                    {
+                        "size": "90x60",
+                        "copies": 20,
+                        "price": 1900
+                    },
+                    {
+                        "size": "75x50",
+                        "copies": 25,
+                        "price": 1500
+                    },
+                    {
+                        "size": "60x40",
+                        "copies": 50,
+                        "price": 1200
+                    },
+                    {
+                        "size": "30x20",
+                        "copies": 50,
+                        "price": 600
+                    }
+                ]
+            },
+            {
+                "material": "Premium Acrylic",
+                "options": [
+                    {
+                        "size": "120x80",
+                        "copies": 10,
+                        "price": 4900
+                    },
+                    {
+                        "size": "90x60",
+                        "copies": 25,
+                        "price": 2900
+                    },
+                    {
+                        "size": "75x50",
+                        "copies": 50,
+                        "price": 1900
+                    },
+                    {
+                        "size": "60x40",
+                        "copies": 75,
+                        "price": 1500
+                    },
+                    {
+                        "size": "30x20",
+                        "copies": 75,
+                        "price": 900
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Feel No Sorrow",
+        "options": [
+            {
+                "material": "Canvas",
+                "options": [
+                    {
+                        "size": "120x80",
+                        "copies": 20,
+                        "price": 2900
+                    },
+                    {
+                        "size": "90x60",
+                        "copies": 25,
+                        "price": 1900
+                    },
+                    {
+                        "size": "75x50",
+                        "copies": 50,
+                        "price": 1500
+                    },
+                    {
+                        "size": "60x40",
+                        "copies": 75,
+                        "price": 1200
+                    },
+                    {
+                        "size": "30x20",
+                        "copies": 75,
+                        "price": 600
+                    }
+                ]
+            },
+            {
+                "material": "Premium Acrylic",
+                "options": [
+                    {
+                        "size": "120x80",
+                        "copies": 20,
+                        "price": 4900
+                    },
+                    {
+                        "size": "90x60",
+                        "copies": 25,
+                        "price": 2900
+                    },
+                    {
+                        "size": "75x50",
+                        "copies": 50,
+                        "price": 1900
+                    },
+                    {
+                        "size": "60x40",
+                        "copies": 75,
+                        "price": 1500
+                    },
+                    {
+                        "size": "30x20",
+                        "copies": 75,
+                        "price": 900
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Northern Lights",
+        "options": [
+            {
+                "material": "Canvas",
+                "options": [
+                    {
+                        "size": "120x80",
+                        "copies": 10,
+                        "price": 2900
+                    },
+                    {
+                        "size": "90x60",
+                        "copies": 20,
+                        "price": 1900
+                    },
+                    {
+                        "size": "75x50",
+                        "copies": 25,
+                        "price": 1500
+                    },
+                    {
+                        "size": "60x40",
+                        "copies": 50,
+                        "price": 1200
+                    },
+                    {
+                        "size": "30x20",
+                        "copies": 50,
+                        "price": 600
+                    }
+                ]
+            },
+            {
+                "material": "Premium Acrylic",
+                "options": [
+                    {
+                        "size": "120x80",
+                        "copies": 10,
+                        "price": 4900
+                    },
+                    {
+                        "size": "90x60",
+                        "copies": 20,
+                        "price": 2900
+                    },
+                    {
+                        "size": "75x50",
+                        "copies": 25,
+                        "price": 1900
+                    },
+                    {
+                        "size": "60x40",
+                        "copies": 50,
+                        "price": 1500
+                    },
+                    {
+                        "size": "30x20",
+                        "copies": 50,
+                        "price": 900
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Modern Connection",
+        "options": [
+            {
+                "material": "Canvas",
+                "options": [
+                    {
+                        "size": "90x120",
+                        "copies": 10,
+                        "price": 2900
+                    },
+                    {
+                        "size": "90x60",
+                        "copies": 10,
+                        "price": 1900
+                    },
+                    {
+                        "size": "75x50",
+                        "copies": 25,
+                        "price": 1500
+                    },
+                    {
+                        "size": "60x40",
+                        "copies": 50,
+                        "price": 699
+                    }
+                ]
+            },
+            {
+                "material": "Premium Acrylic",
+                "options": [
+                    {
+                        "size": "80x120",
+                        "copies": "10",
+                        "price": 4900
+                    },
+                    {
+                        "size": "75x100",
+                        "copies": 10,
+                        "price": 4200
+                    },
+                    {
+                        "size": "60x80",
+                        "copies": 20,
+                        "price": 2900
+                    },
+                    {
+                        "size": "30x40",
+                        "copies": 25,
+                        "price": 900
+                    }
+                ]
+            }
+        ]
+    }
+]
