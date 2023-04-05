@@ -6,7 +6,6 @@ import { FormProps, Material, Painting, Option } from './interface.js';
 import Input from '../Input';
 import { makeUpperCase, validateForm } from '@/helpers';
 import emailjs from 'emailjs-com';
-import { log } from 'console';
 
 export default function OrderForm() {
     const formRef = useRef<HTMLFormElement>(null);
@@ -55,8 +54,6 @@ export default function OrderForm() {
         if (errors.length > 0) {
             setMessage(makeUpperCase(errors.join(', ')) + " can't be empty");
         } else {
-            console.log('ready for submit?????');
-
             formRef?.current?.requestSubmit();
         }
     };
