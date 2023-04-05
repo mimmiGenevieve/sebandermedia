@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
-    max-width: 100rem;
-    width: 50vw;
     margin: 0 auto;
     text-align: center;
     padding: 5rem 0;
@@ -15,6 +13,11 @@ export const Wrapper = styled.div`
     #form {
         display: none;
     }
+
+    @media only screen and (min-width: 600px) {
+        width: 50vw;
+        max-width: 100rem;
+    }
 `;
 
 export const Form = styled.div`
@@ -23,7 +26,11 @@ export const Form = styled.div`
     padding: 2rem;
     background-color: #f7f7f7;
     margin: 3rem auto;
-    width: 45rem;
+    position: relative;
+
+    @media only screen and (min-width: 600px) {
+        width: 45rem;
+    }
 
     .error {
         color: red;
@@ -65,10 +72,40 @@ export const Group = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 2rem;
+    flex-flow: column-reverse;
+
+    @media only screen and (min-width: 600px) {
+        flex-flow: row;
+        margin-bottom: 2rem;
+
+        .info {
+            max-width: 20rem;
+            margin-right: 2rem;
+
+            h2 {
+                margin-top: 0;
+            }
+
+            label {
+                input {
+                    width: 15rem;
+                }
+            }
+        }
+
+        .order {
+            height: 100%;
+        }
+
+        &.footer {
+            justify-content: space-between;
+        }
+    }
 
     &.footer {
-        justify-content: space-between;
+        flex-flow: column;
+        min-height: 6rem;
+        justify-content: flex-end;
         align-items: flex-end;
         margin-bottom: 0;
 
@@ -99,22 +136,29 @@ export const Group = styled.div`
         border-radius: 0;
     }
 
-    .order {
-        height: 100%;
-        min-height: 10rem;
-    }
-
     .info {
-        max-width: 20rem;
-        margin-right: 2rem;
+        h2 {
+            margin-top: 2rem;
+        }
+
+        p {
+            font-size: 0.8rem;
+            margin: 0;
+            padding-bottom: 1rem;
+        }
+
         label {
             margin: 0.5rem;
 
             input {
                 margin-left: 0.5rem;
                 padding: 0.25rem;
-                width: 15rem;
+                width: 10rem;
             }
         }
+    }
+
+    .order {
+        min-height: 11rem;
     }
 `;

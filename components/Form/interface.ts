@@ -31,4 +31,5 @@ export interface InputProps {
     value: string;
     onChange: (e: any) => void;
     id: string;
+    type: string;
 }

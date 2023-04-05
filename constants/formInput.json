@@ -4,6 +4,16 @@
         "label": "Name"
     },
     {
+        "id": "email",
+        "label": "Email",
+        "type": "email"
+    },
+    {
+        "id": "phone",
+        "label": "Phone",
+        "type": "tel"
+    },
+    {
         "id": "street",
         "label": "Street"
     },
@@ -14,8 +24,5 @@
     {
         "id": "city",
         "label": "City"
-    },
-    {
-        "id": "email",
-        "label": "Email"
-    }]
+    }
+]

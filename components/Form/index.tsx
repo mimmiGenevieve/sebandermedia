@@ -6,18 +6,21 @@ import { FormProps, Material, Painting, Option } from './interface.js';
 import Input from '../Input';
 import { makeUpperCase, validateForm } from '@/helpers';
 import emailjs from 'emailjs-com';
+import LoadingComponent from '../LoadingComponent';
 
 export default function OrderForm() {
     const formRef = useRef<HTMLFormElement>(null);
     const [isSent, setIsSent] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [form, setForm] = useState<FormProps>({
         name: '',
+        email: '',
+        phone: '',
         address: {
             street: '',
             zipCode: '',
             city: '',
         },
-        email: '',
         order: {
             painting: null,
             material: null,
@@ -54,6 +57,7 @@ export default function OrderForm() {
         if (errors.length > 0) {
             setMessage(makeUpperCase(errors.join(', ')) + " can't be empty");
         } else {
+            setIsLoading(true);
             formRef?.current?.requestSubmit();
         }
     };
@@ -61,20 +65,15 @@ export default function OrderForm() {
     function submitInquiry(event: React.FormEvent<HTMLFormElement>) {
         emailjs
             .sendForm(
-                'service_az63phu',
-                'order-inquiry',
+                process.env.serviceID,
+                process.env.templateID,
                 event.target as HTMLFormElement,
-                'V9HxxBTsaIFWlzSXC'
+                process.env.emaiJSToken
             )
-            .then(
-                (result) => {
-                    setIsSent(true);
-                    console.log(result.text);
-                },
-                (error) => {
-                    console.log(error.text);
-                }
-            );
+            .then(() => {
+                setIsSent(true);
+                setIsLoading(false);
+            });
     }
 
     const handleOrder = (
@@ -146,6 +145,13 @@ export default function OrderForm() {
                 />
                 <input
                     type="text"
+                    name="user_phone"
+                    id="user_phone"
+                    value={form.phone}
+                    readOnly
+                />
+                <input
+                    type="text"
                     name="painting_name"
                     id="painting_name"
                     value={form.order.painting?.name}
@@ -210,18 +216,24 @@ export default function OrderForm() {
                 </Form>
             ) : (
                 <Form>
+                    {isLoading && <LoadingComponent />}
                     <Group>
                         <div className="info">
                             <h2>Your information</h2>
-                            {inputs.map(({ id, label }) => (
+                            <p>
+                                Please note that only an address within Sweden
+                                is accepted for delivery purposes.
+                            </p>
+                            {inputs.map(({ id, label, type }) => (
                                 <Input
                                     key={id}
                                     id={id}
                                     label={label}
+                                    type={type ?? 'text'}
                                     value={
-                                        id === 'email'
-                                            ? form[id]
-                                            : form.address[id]
+                                        id === ('street' || 'city' || 'zipCode')
+                                            ? form.address[id]
+                                            : form[id]
                                     }
                                     onChange={(e) => handleInputChange(e)}
                                 />
@@ -328,23 +340,18 @@ export default function OrderForm() {
                                     </label>
                                 </>
                             )}
+                            {form.order.size && (
+                                <div className="price">
+                                    Price: {form.order.size.price}SEK
+                                </div>
+                            )}
                         </div>
                     </Group>
                     <Group className="footer">
-                        <div>
-                            <span className="error">{message}</span>
-                            <button
-                                type="button"
-                                onClick={() => handleSubmit()}
-                            >
-                                Submit
-                            </button>
-                        </div>
-                        {form.order.size && (
-                            <div className="price">
-                                Price: {form.order.size.price}SEK
-                            </div>
-                        )}
+                        <span className="error">{message}</span>
+                        <button type="button" onClick={() => handleSubmit()}>
+                            Submit
+                        </button>
                     </Group>
                 </Form>
             )}
