@@ -1,12 +1,16 @@
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import paintings from 'constants/formData.json';
 import inputs from 'constants/formInput.json';
 import { Wrapper, Form, Group } from './styles';
 import { FormProps, Material, Painting, Option } from './interface.js';
 import Input from '../Input';
 import { makeUpperCase, validateForm } from '@/helpers';
+import emailjs from 'emailjs-com';
+import { log } from 'console';
 
 export default function OrderForm() {
+    const formRef = useRef<HTMLFormElement>(null);
+    const [isSent, setIsSent] = useState(false);
     const [form, setForm] = useState<FormProps>({
         name: '',
         address: {
@@ -51,9 +55,30 @@ export default function OrderForm() {
         if (errors.length > 0) {
             setMessage(makeUpperCase(errors.join(', ')) + " can't be empty");
         } else {
-            // submit form data
+            console.log('ready for submit?????');
+
+            formRef?.current?.requestSubmit();
         }
     };
+
+    function submitInquiry(event: React.FormEvent<HTMLFormElement>) {
+        emailjs
+            .sendForm(
+                'service_az63phu',
+                'order-inquiry',
+                event.target as HTMLFormElement,
+                'V9HxxBTsaIFWlzSXC'
+            )
+            .then(
+                (result) => {
+                    setIsSent(true);
+                    console.log(result.text);
+                },
+                (error) => {
+                    console.log(error.text);
+                }
+            );
+    }
 
     const handleOrder = (
         value: string,
@@ -107,6 +132,72 @@ export default function OrderForm() {
 
     return (
         <Wrapper>
+            <form
+                id="form"
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    submitInquiry(e);
+                }}
+                ref={formRef}
+            >
+                <input
+                    type="text"
+                    name="user_name"
+                    id="user_name"
+                    value={form.name}
+                    readOnly
+                />
+                <input
+                    type="text"
+                    name="painting_name"
+                    id="painting_name"
+                    value={form.order.painting?.name}
+                    readOnly
+                />
+                <input
+                    type="text"
+                    name="painting_material"
+                    id="painting_material"
+                    value={form.order.material?.material}
+                    readOnly
+                />
+                <input
+                    type="text"
+                    name="painting_size"
+                    id="painting_size"
+                    value={form.order.size?.size}
+                    readOnly
+                />
+                <input
+                    type="text"
+                    name="user_email"
+                    id="user_email"
+                    value={form.email}
+                    readOnly
+                />
+                <input
+                    type="text"
+                    name="user_address_street"
+                    id="user_address_street"
+                    value={form.address.street}
+                    readOnly
+                />
+                <input
+                    type="text"
+                    name="user_address_zipcode"
+                    id="user_address_zipcode"
+                    value={form.address.zipCode}
+                    readOnly
+                />
+                <input
+                    type="text"
+                    name="user_address_city"
+                    id="user_address_city"
+                    value={form.address.city}
+                    readOnly
+                />
+            </form>
+
             <h1>Interested in buying a painting from me?</h1>
             <p>
                 Contact me through the form below, or send an email to{' '}
@@ -115,136 +206,151 @@ export default function OrderForm() {
                 </a>
             </p>
 
-            <Form>
-                <Group>
-                    <div className="info">
-                        <h2>Your information</h2>
-                        {inputs.map(({ id, label }) => (
-                            <Input
-                                key={id}
-                                id={id}
-                                label={label}
-                                value={
-                                    id === 'email' ? form[id] : form.address[id]
-                                }
-                                onChange={(e) => handleInputChange(e)}
-                            />
-                        ))}
-                    </div>
-
-                    <div className="order">
-                        <label>
-                            <span>Motif:</span>
-                            <select
-                                value={form.order.painting?.name ?? 'default'}
-                                onChange={(e) => {
-                                    handleOrder(
-                                        e.target.value,
-                                        paintings as Painting[],
-                                        'painting'
-                                    );
-                                }}
-                            >
-                                <option value="default" disabled>
-                                    Select a painting
-                                </option>
-                                {paintings.map((painting) => (
-                                    <option
-                                        key={painting.name}
-                                        value={painting.name}
-                                    >
-                                        {painting.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </label>
-                        {form.order.painting && (
-                            <>
-                                <label>
-                                    <span>Material:</span>
-                                    <select
-                                        value={
-                                            form.order.material?.material ??
-                                            'default'
-                                        }
-                                        onChange={(e) => {
-                                            handleOrder(
-                                                e.target.value,
-                                                form.order.painting
-                                                    .options as Material[],
-                                                'material'
-                                            );
-                                        }}
-                                    >
-                                        <option value="default" disabled>
-                                            Select a material
-                                        </option>
-                                        {form.order.painting.options.map(
-                                            (item: Material) => (
-                                                <option
-                                                    key={item.material}
-                                                    value={item.material}
-                                                >
-                                                    {item.material}
-                                                </option>
-                                            )
-                                        )}
-                                    </select>
-                                </label>
-                            </>
-                        )}
-
-                        {form.order.material && (
-                            <>
-                                <label>
-                                    <span>Size:</span>
-                                    <select
-                                        value={
-                                            form.order.size?.size ?? 'default'
-                                        }
-                                        onChange={(e) =>
-                                            handleOrder(
-                                                e.target.value,
-                                                form.order.material
-                                                    .options as Option[],
-                                                'size'
-                                            )
-                                        }
-                                    >
-                                        <option value="default" disabled>
-                                            Select a size
-                                        </option>
-                                        {form.order.material.options.map(
-                                            (item: Option) => (
-                                                <option
-                                                    key={item.size}
-                                                    value={item.size}
-                                                >
-                                                    {item.size} (limited print
-                                                    of {item.copies})
-                                                </option>
-                                            )
-                                        )}
-                                    </select>
-                                </label>
-                            </>
-                        )}
-                    </div>
-                </Group>
-                <Group className="footer">
-                    <div>
-                        <span className="error">{message}</span>
-                        <button type="button" onClick={() => handleSubmit()}>
-                            Submit
-                        </button>
-                    </div>
-                    {form.order.size && (
-                        <div className="price">
-                            Price: {form.order.size.price}SEK
+            {isSent ? (
+                <Form>
+                    Thank you for purchase inquiry! I will get back to you as
+                    soon as possible.
+                </Form>
+            ) : (
+                <Form>
+                    <Group>
+                        <div className="info">
+                            <h2>Your information</h2>
+                            {inputs.map(({ id, label }) => (
+                                <Input
+                                    key={id}
+                                    id={id}
+                                    label={label}
+                                    value={
+                                        id === 'email'
+                                            ? form[id]
+                                            : form.address[id]
+                                    }
+                                    onChange={(e) => handleInputChange(e)}
+                                />
+                            ))}
                         </div>
-                    )}
-                </Group>
-            </Form>
+
+                        <div className="order">
+                            <label>
+                                <span>Motif:</span>
+                                <select
+                                    value={
+                                        form.order.painting?.name ?? 'default'
+                                    }
+                                    onChange={(e) => {
+                                        handleOrder(
+                                            e.target.value,
+                                            paintings as Painting[],
+                                            'painting'
+                                        );
+                                    }}
+                                >
+                                    <option value="default" disabled>
+                                        Select a painting
+                                    </option>
+                                    {paintings.map((painting) => (
+                                        <option
+                                            key={painting.name}
+                                            value={painting.name}
+                                        >
+                                            {painting.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </label>
+                            {form.order.painting && (
+                                <>
+                                    <label>
+                                        <span>Material:</span>
+                                        <select
+                                            value={
+                                                form.order.material?.material ??
+                                                'default'
+                                            }
+                                            onChange={(e) => {
+                                                handleOrder(
+                                                    e.target.value,
+                                                    form.order.painting
+                                                        .options as Material[],
+                                                    'material'
+                                                );
+                                            }}
+                                        >
+                                            <option value="default" disabled>
+                                                Select a material
+                                            </option>
+                                            {form.order.painting.options.map(
+                                                (item: Material) => (
+                                                    <option
+                                                        key={item.material}
+                                                        value={item.material}
+                                                    >
+                                                        {item.material}
+                                                    </option>
+                                                )
+                                            )}
+                                        </select>
+                                    </label>
+                                </>
+                            )}
+
+                            {form.order.material && (
+                                <>
+                                    <label>
+                                        <span>Size:</span>
+                                        <select
+                                            value={
+                                                form.order.size?.size ??
+                                                'default'
+                                            }
+                                            onChange={(e) =>
+                                                handleOrder(
+                                                    e.target.value,
+                                                    form.order.material
+                                                        .options as Option[],
+                                                    'size'
+                                                )
+                                            }
+                                        >
+                                            <option value="default" disabled>
+                                                Select a size
+                                            </option>
+                                            {form.order.material.options.map(
+                                                (item: Option) => (
+                                                    <option
+                                                        key={item.size}
+                                                        value={item.size}
+                                                    >
+                                                        {item.size} (limited
+                                                        print of {item.copies})
+                                                    </option>
+                                                )
+                                            )}
+                                        </select>
+                                    </label>
+                                </>
+                            )}
+                        </div>
+                    </Group>
+                    <Group className="footer">
+                        <div>
+                            <span className="error">{message}</span>
+                            <button
+                                type="button"
+                                onClick={() => handleSubmit()}
+                            >
+                                Submit
+                            </button>
+                        </div>
+                        {form.order.size && (
+                            <div className="price">
+                                Price: {form.order.size.price}SEK
+                            </div>
+                        )}
+                    </Group>
+                </Form>
+            )}
         </Wrapper>
     );
 }

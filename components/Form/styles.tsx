@@ -11,9 +11,13 @@ export const Wrapper = styled.div`
     p {
         margin: 1rem;
     }
+
+    #form {
+        display: none;
+    }
 `;
 
-export const Form = styled.form`
+export const Form = styled.div`
     text-align: left;
     margin-top: 2rem;
     padding: 2rem;
