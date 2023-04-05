@@ -47,7 +47,6 @@ const Title = styled.h1`
 
         svg {
             height: 2.5rem;
-            max-width: 100%;
         }
     }
 `;

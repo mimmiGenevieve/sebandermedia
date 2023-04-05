@@ -16,8 +16,6 @@ const Container = styled.div`
 `;
 
 const HeroImage = ({ item }: { item: Data }) => {
-    console.log(item);
-
     return (
         <Container>
             <span>{item.title}</span>

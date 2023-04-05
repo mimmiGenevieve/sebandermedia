@@ -4,7 +4,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Autoplay, Navigation, Pagination } from 'swiper';
 import styled from 'styled-components';
 import 'swiper/css';
-import { Key } from 'react';
 
 SwiperCore.use([Navigation, Pagination, Autoplay]);
 
