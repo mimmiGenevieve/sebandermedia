@@ -65,10 +65,10 @@ export default function OrderForm() {
     function submitInquiry(event: React.FormEvent<HTMLFormElement>) {
         emailjs
             .sendForm(
-                process.env.serviceID,
-                process.env.templateID,
+                process.env.serviceID ?? '',
+                process.env.templateID ?? '',
                 event.target as HTMLFormElement,
-                process.env.emaiJSToken
+                process.env.emaiJSToken ?? ''
             )
             .then(() => {
                 setIsSent(true);

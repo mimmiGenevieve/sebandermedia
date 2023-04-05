@@ -4,6 +4,14 @@ import RenderItem from 'components/RenderItem';
 import Logo from 'components/logo';
 import { useEffect, useRef, useState } from 'react';
 import OrderForm from '@/components/Form';
+import { baseUrl } from '@/constants/baseUrl';
+import {
+    ApolloClient,
+    InMemoryCache,
+    createHttpLink,
+    gql,
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 
 const Wrapper = styled.div`
     position: relative;
@@ -96,12 +104,56 @@ const Home = ({ componentsCollection }: { componentsCollection: any }) => {
 };
 
 export async function getStaticProps() {
-    const response = await fetch(
-        'http://localhost:3000/api/graphql?type=landingpage'
-    );
-    const data = await response.json();
+    const httpLink = createHttpLink({
+        uri: 'https://graphql.contentful.com/content/v1/spaces/3x8meoim7gkz/environments/master',
+    });
 
-    return { props: data.pageCollection.items[0] };
+    const authLink = setContext((_, { headers }) => {
+        return {
+            headers: {
+                ...headers,
+                authorization: `Bearer ${process.env.accessToken}`,
+            },
+        };
+    });
+
+    const client = new ApolloClient({
+        link: authLink.concat(httpLink),
+        cache: new InMemoryCache(),
+    });
+
+    const response = await client.query({
+        query: gql`
+            query getLandingpage {
+                pageCollection(where: { landingpage: true }, limit: 1) {
+                    items {
+                        componentsCollection(limit: 5) {
+                            items {
+                                ... on HeroImage {
+                                    title
+                                    image {
+                                        fileName
+                                        url
+                                    }
+                                }
+                                ... on Carousel {
+                                    title
+                                    imagesCollection(limit: 10) {
+                                        items {
+                                            fileName
+                                            url
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        `,
+    });
+
+    return { props: response?.data.pageCollection.items[0] };
 }
 
 export default Home;
